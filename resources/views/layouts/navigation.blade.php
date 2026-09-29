@@ -21,9 +21,13 @@
                         :active="request()->routeIs('trips.*')">
                         {{ __('Trips') }}
                     </x-nav-link>
+                    <x-nav-link
+                        :href="route('admin.bookings.index')"
+                        :active="request()->routeIs('admin.bookings.*')">
+                        {{ __('Bookings') }}
+                    </x-nav-link>
                     @endif
                     @if (auth()->user()->role === 'customer')
-
                     <x-nav-link
                         :href="route('customer.trips.index')"
                         :active="request()->routeIs('customer.trips.*')">
@@ -35,7 +39,6 @@
                         :active="request()->routeIs('customer.bookings.*')">
                         {{ __('My Bookings') }}
                     </x-nav-link>
-
                     @endif
                 </div>
             </div>

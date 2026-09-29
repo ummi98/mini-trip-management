@@ -6,6 +6,7 @@ use App\Http\Controllers\TripController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CustomerTripController;
 use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\AdminBookingController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,6 +24,20 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'role:admin,staff'])->group(function () {
     Route::resource('trips', TripController::class);
+    Route::get(
+        '/bookings',
+        [AdminBookingController::class, 'index']
+    )->name('admin.bookings.index');
+    
+    Route::get(
+        '/bookings/{booking}',
+        [AdminBookingController::class, 'show']
+    )->name('admin.bookings.show');
+    
+    Route::patch(
+        '/bookings/{booking}',
+        [AdminBookingController::class, 'update']
+    )->name('admin.bookings.update');
 });
 
 Route::middleware(['auth', 'role:customer'])
