@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TripController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CustomerTripController;
+use App\Http\Controllers\ParticipantController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,5 +20,50 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::middleware(['auth', 'role:admin,staff'])->group(function () {
+    Route::resource('trips', TripController::class);
+});
+
+Route::middleware(['auth', 'role:customer'])
+    ->prefix('customer')
+    ->name('customer.')
+    ->group(function () {
+
+        Route::get(
+            '/trips',
+            [CustomerTripController::class, 'index']
+        )->name('trips.index');
+
+        Route::get(
+            '/trips/{trip}',
+            [CustomerTripController::class, 'show']
+        )->name('trips.show');
+
+        Route::post(
+            '/trips/{trip}/book',
+            [BookingController::class, 'store']
+        )->name('bookings.store');
+
+        Route::get(
+            '/bookings',
+            [BookingController::class, 'index']
+        )->name('bookings.index');
+
+        Route::get(
+            '/bookings/{booking}',
+            [BookingController::class, 'show']
+        )->name('bookings.show');
+
+        Route::get(
+            '/bookings/{booking}/participants/create',
+            [ParticipantController::class, 'create']
+        )->name('participants.create');
+
+        Route::post(
+            '/bookings/{booking}/participants',
+            [ParticipantController::class, 'store']
+        )->name('participants.store');
+    });
 
 require __DIR__.'/auth.php';

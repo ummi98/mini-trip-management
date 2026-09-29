@@ -4,12 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
-
 class Trip extends Model
 {
     protected $fillable = [
@@ -32,4 +26,17 @@ class Trip extends Model
             'max_capacity' => 'integer',
         ];
     }
+
+    public function bookings(): HasMany
+{
+    return $this->hasMany(Booking::class);
+}
+
+public function participants()
+{
+    return $this->hasManyThrough(
+        Participant::class,
+        Booking::class
+    );
+}
 }
