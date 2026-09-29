@@ -76,7 +76,11 @@ class BookingController extends Controller
     {
         $this->ensureOwner($booking);
 
-        $booking->load(['trip', 'participants']);
+        $booking->load([
+            'user',
+            'trip',
+            'participants.booking.trip',
+        ]);
 
         return view(
             'customer.bookings.show',

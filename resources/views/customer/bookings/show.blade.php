@@ -40,10 +40,7 @@
 
                     <p>
                         <strong>Total:</strong>
-                        RM {{ number_format(
-                            $booking->total_amount,
-                            2
-                        ) }}
+                        RM {{ number_format($booking->total_amount, 2) }}
                     </p>
 
                 </div>
@@ -60,8 +57,7 @@
                                 'customer.participants.create',
                                 $booking
                             ) }}"
-                            class="rounded bg-gray-800 px-4 py-2 text-white"
-                        >
+                            class="rounded bg-gray-800 px-4 py-2 text-white">
                             Add Participant
                         </a>
                     @endif
@@ -85,6 +81,7 @@
                             @forelse ($booking->participants as $participant)
 
                                 <tr class="border-b">
+
                                     <td class="p-3">
                                         {{ $participant->name }}
                                     </td>
@@ -94,13 +91,23 @@
                                     </td>
 
                                     <td class="p-3">
-                                        {{ $participant->passport_expiry
-                                            ?->format('d M Y') ?? '-' }}
+                                        <div>
+                                            {{ $participant->passport_expiry
+                                                ?->format('d M Y') ?? '-' }}
+                                        </div>
+
+                                        @if ($participant->hasPassportExpiryWarning())
+                                            <div class="mt-1 text-xs font-semibold text-red-600">
+                                                ⚠ Passport validity is less than
+                                                6 months from the trip date.
+                                            </div>
+                                        @endif
                                     </td>
 
                                     <td class="p-3">
                                         {{ $participant->nationality ?? '-' }}
                                     </td>
+
                                 </tr>
 
                             @empty
@@ -108,8 +115,7 @@
                                 <tr>
                                     <td
                                         colspan="4"
-                                        class="p-4 text-center text-gray-500"
-                                    >
+                                        class="p-4 text-center text-gray-500">
                                         No participants registered yet.
                                     </td>
                                 </tr>

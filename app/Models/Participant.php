@@ -29,4 +29,21 @@ class Participant extends Model
     {
         return $this->belongsTo(Booking::class);
     }
+
+    public function hasPassportExpiryWarning(): bool
+    {
+        if (! $this->passport_expiry) {
+            return false;
+        }
+
+        $tripStartDate = $this->booking?->trip?->start_date;
+
+        if (! $tripStartDate) {
+            return false;
+        }
+
+        return $this->passport_expiry->lt(
+            $tripStartDate->copy()->addMonths(6)
+        );
+    }
 }
